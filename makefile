@@ -8,18 +8,25 @@ OBJ_DIR = obj
 BIN_DIR = bin
 
 # Files
-SRC = $(SRC_DIR)/ls-v1.1.0.c
-OBJ = $(OBJ_DIR)/ls-v1.1.0.o
-BIN = $(BIN_DIR)/ls
+SRC = $(SRC_DIR)/ls-v1.3.0.c
+OBJ = $(OBJ_DIR)/ls-v1.3.0.o
+BIN = $(BIN_DIR)/ls-v1.3.0
 
 # Default target
 all: $(BIN)
 
-$(OBJ): $(SRC)
+$(OBJ_DIR) $(BIN_DIR):
+	mkdir -p $@
+
+$(OBJ): $(SRC) | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $(SRC) -o $(OBJ)
 
-$(BIN): $(OBJ)
+$(BIN): $(OBJ) | $(BIN_DIR)
 	$(CC) $(CFLAGS) $(OBJ) -o $(BIN)
 
 clean:
 	rm -f $(OBJ) $(BIN)
+
+run: $(BIN)
+	./$(BIN)
+
