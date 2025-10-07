@@ -1,18 +1,28 @@
-#define _GNU_SOURCE
+/* src/ls-v1.1.0.c
+ * ls - simple listing with -l long listing (version 1.1.0)
+ *
+ * Uses: lstat(), getpwuid(), getgrgid(), strftime(), readlink()
+ */
+// --- Standard C and POSIX headers for ls implementation ---
 #define _XOPEN_SOURCE 700
-#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <pwd.h>
-#include <grp.h>
-#include <time.h>
-#include <errno.h>
-#include <limits.h>
+#include <sys/types.h>   // defines mode_t, pid_t, etc.
+#include <sys/stat.h>    // defines struct stat, S_IS* macros, lstat()
+#include <unistd.h>      // defines readlink(), getopt(), etc.
+#include <limits.h>      // defines PATH_MAX
+#include <pwd.h>         // defines getpwuid()
+#include <grp.h>         // defines getgrgid()
+#include <time.h>        // defines ctime()
+#include <errno.h>       // defines errno
+
+// define PATH_MAX manually if not defined on system
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+
 
 /* Print a permission string (like "drwxr-xr-x") followed by a space */
 static void print_permissions(mode_t mode) {
